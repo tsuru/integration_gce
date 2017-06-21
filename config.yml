@@ -1,0 +1,14 @@
+name: "integration-test"
+driver:
+  name: google
+  private-ip-interface: ens4
+  options:
+    google-project: $GCE_PROJECT_ID
+    google-tags: tsuru
+docker-flags:
+  - experimental
+hosts:
+  apps:
+    size: 1
+components:
+  install-dashboard: false
