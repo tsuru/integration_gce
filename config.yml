@@ -4,6 +4,7 @@ driver:
   private-ip-interface: ens4
   options:
     google-project: $GCE_PROJECT_ID
+    google-zone: $GCE_ZONE
     google-tags: tsuru
 docker-flags:
   - experimental
