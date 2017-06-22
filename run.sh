@@ -19,6 +19,7 @@ go get github.com/tsuru/tsuru/...
 echo "Go get tsuru client..."
 go get github.com/tsuru/tsuru-client/...
 
+export TSURU_INTEGRATION_clusters="gce"
 export TSURU_INTEGRATION_examplesdir="${GOPATH}/src/github.com/tsuru/platforms/examples"
 export TSURU_INTEGRATION_installerconfig=${finalconfigpath}
 export TSURU_INTEGRATION_nodeopts="iaas=dockermachine"
