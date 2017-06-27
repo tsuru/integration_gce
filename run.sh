@@ -24,6 +24,7 @@ go get github.com/tsuru/tsuru-client/...
 gcefilename=$tmpdir/google-application-credentials
 echo $GCE_SERVICE_ACCOUNT > $gcefilename
 export GOOGLE_APPLICATION_CREDENTIALS=$gcefilename
+export TSURU_INTEGRATION_installername=$instancename
 export TSURU_INTEGRATION_clusters="gce"
 export TSURU_INTEGRATION_examplesdir="${GOPATH}/src/github.com/tsuru/platforms/examples"
 export TSURU_INTEGRATION_installerconfig=${finalconfigpath}
