@@ -13,3 +13,9 @@ hosts:
     size: 1
 components:
   install-dashboard: false
+  tsuru:
+    config:
+      debug: true
+      iaas:
+        dockermachine:
+          debug: true
