@@ -1,5 +1,7 @@
 # Integration test for Tsuru on Google Compute Engine
 
+[![CircleCI](https://circleci.com/gh/tsuru/integration_gce.svg?style=svg)](https://circleci.com/gh/tsuru/integration_gce)
+
 This project should make it easier to run Tsuru integration test on Google Compute Engine.
 
 Required environment variables:
