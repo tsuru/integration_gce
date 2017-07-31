@@ -9,6 +9,9 @@ driver:
 docker-storage-driver: overlay
 docker-flags:
   - experimental
+  - log-driver gcplogs
+  - log-opt gcp-log-cmd=true
+  - log-opt labels=integration-test
 hosts:
   apps:
     size: 1
