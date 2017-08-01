@@ -25,7 +25,9 @@ gcefilename=$tmpdir/google-application-credentials
 echo $GCE_SERVICE_ACCOUNT > $gcefilename
 export GOOGLE_APPLICATION_CREDENTIALS=$gcefilename
 export TSURU_INTEGRATION_installername=$instancename
-export TSURU_INTEGRATION_clusters="gce"
+if [ -z $TSURU_INTEGRATION_clusters ]; then
+  export TSURU_INTEGRATION_clusters="gce"
+fi
 export TSURU_INTEGRATION_examplesdir="${GOPATH}/src/github.com/tsuru/platforms/examples"
 export TSURU_INTEGRATION_installerconfig=${finalconfigpath}
 export TSURU_INTEGRATION_nodeopts="iaas=dockermachine"
