@@ -9,3 +9,7 @@ Required environment variables:
 - *GCE_PROJECT_ID*: ID for a project created in GCE
 - *GCE_ZONE*: the [GCE zone](https://cloud.google.com/compute/docs/regions-zones/regions-zones) where you want the Tsuru instance to be created
 - *GCE_SERVICE_ACCOUNT*: [Service account](https://cloud.google.com/compute/docs/access/service-accounts) data
+
+Optional environment variables:
+
+- *TSURUVERSION*: tsuru api image version to run the tests, defaults to latest
