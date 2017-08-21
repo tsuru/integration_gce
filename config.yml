@@ -17,6 +17,7 @@ hosts:
     size: 1
 components:
   install-dashboard: false
+  tsuru-image: tsuru/api:$TSURUVERSION
   tsuru:
     config:
       debug: true

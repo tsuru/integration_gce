@@ -2,6 +2,10 @@
 
 set -e
 
+TSURUVERSION=${TSURUVERSION:-latest}
+
+echo "Going to test tsuru image version: $TSURUVERSION"
+
 function abspath() { echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"; }
 mypath=$(abspath $(dirname ${BASH_SOURCE[0]}))
 finalconfigpath=$(mktemp)
@@ -10,6 +14,7 @@ instancename=$(echo "integration-test-$RANDOM")
 sed -i.bak "s|\$GCE_INSTANCE_NAME|${instancename}|g" ${finalconfigpath}
 sed -i.bak "s|\$GCE_PROJECT_ID|${GCE_PROJECT_ID}|g" ${finalconfigpath}
 sed -i.bak "s|\$GCE_ZONE|${GCE_ZONE}|g" ${finalconfigpath}
+sed -i.bak "s|\$TSURUVERSION|${TSURUVERSION}|g" ${finalconfigpath}
 
 tmpdir=$(mktemp -d)
 export GOPATH=${tmpdir}
