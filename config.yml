@@ -6,6 +6,7 @@ driver:
     google-project: $GCE_PROJECT_ID
     google-zone: $GCE_ZONE
     google-tags: tsuru
+    google-disk-size: 20
 docker-storage-driver: overlay
 docker-flags:
   - experimental
