@@ -1,0 +1,12 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.10
+    steps:
+      - checkout
+      - run: sudo apt-get install rsyslog xmlsec1 libsasl2-dev uuid-runtime
+      - run:
+          name: Run tests
+          command: |
+            while true; do echo .; sleep 30; done & ./run.sh
