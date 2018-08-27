@@ -23,8 +23,20 @@ echo "Go get platforms..."
 go get github.com/tsuru/platforms/...
 echo "Go get tsuru..."
 go get github.com/tsuru/tsuru/integration
-echo "Go get tsuru client..."
-go get github.com/tsuru/tsuru-client/tsuru
+
+echo "Getting tsuru client..."
+pushd $GOPATH/src/github.com/tsuru
+git clone https://github.com/tsuru/tsuru-client.git && cd tsuru-client
+if [ "$TSURUVERSION" != "latest" ]; then
+  MINOR=$(echo "$TSURUVERSION" | sed -E 's/^([0-9]+\.[0-9]+).*$/\1/g')
+  CLIENT_TAG=$(git tag --list "$MINOR.*" --sort=-taggerdate | head -1)
+  if [ "$CLIENT_TAG" != "" ]; then
+    echo "Checking out tsuru-client $CLIENT_TAG"
+    git checkout $CLIENT_TAG
+  fi
+fi
+go install ./...
+popd
 
 gcefilename=$tmpdir/google-application-credentials
 echo $GCE_SERVICE_ACCOUNT > $gcefilename
