@@ -24,9 +24,9 @@ go get github.com/tsuru/platforms/...
 echo "Go get tsuru..."
 go get github.com/tsuru/tsuru/integration
 
-echo "Getting tsuru client..."
-pushd $GOPATH/src/github.com/tsuru
-git clone https://github.com/tsuru/tsuru-client.git && cd tsuru-client
+echo "Go get tsuru client..."
+go get -d github.com/tsuru/tsuru-client/tsuru
+pushd $GOPATH/src/github.com/tsuru/tsuru-client
 if [ "$TSURUVERSION" != "latest" ]; then
   MINOR=$(echo "$TSURUVERSION" | sed -E 's/^[^0-9]*([0-9]+\.[0-9]+).*$/\1/g')
   CLIENT_TAG=$(git tag --list "$MINOR.*" --sort=-taggerdate | head -1)
