@@ -20,7 +20,7 @@ tmpdir=$(mktemp -d)
 export GOPATH=${tmpdir}
 export PATH=$GOPATH/bin:$PATH
 echo "Go get platforms..."
-go get github.com/tsuru/platforms/...
+go get -d github.com/tsuru/platforms/examples/go
 echo "Go get tsuru..."
 go get github.com/tsuru/tsuru/integration
 
