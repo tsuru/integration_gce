@@ -2,7 +2,7 @@
 
 set -e
 
-export GCE_MACHINE_TYPE=n1-standard-2
+export GCE_MACHINE_TYPE=n1-standard-4
 TSURUVERSION=${TSURUVERSION:-latest}
 
 echo "Going to test tsuru image version: $TSURUVERSION"
