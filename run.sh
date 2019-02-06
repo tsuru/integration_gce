@@ -50,6 +50,7 @@ fi
 export TSURU_INTEGRATION_examplesdir="${GOPATH}/src/github.com/tsuru/platforms/examples"
 export TSURU_INTEGRATION_installerconfig=${finalconfigpath}
 export TSURU_INTEGRATION_nodeopts="iaas=dockermachine"
+export TSURU_INTEGRATION_clusters="gke"
 export TSURU_INTEGRATION_maxconcurrency=4
 export TSURU_INTEGRATION_enabled=1
 if [ -z $TSURU_INTEGRATION_verbose ]; then
