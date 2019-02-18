@@ -34,7 +34,7 @@ function cleanup() {
     gcloud container clusters delete -q $clusters
   fi
   if [ ! -z "$instances" ]; then
-    gcloud compute instances delete --delete-disks -q $instances
+    gcloud compute instances delete --delete-disks=all -q $instances
   fi
 }
 
