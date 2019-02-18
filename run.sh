@@ -26,6 +26,7 @@ function cleanup() {
 
   export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=$gcefilename
   gcloud config set project $GCE_PROJECT_ID
+  gcloud config set compute/zone $GCE_ZONE
 
   clusters=$(gcloud container clusters list --format json | jq -r '.[].name | select(. | contains("icluster-kube-"))')
   instances=$(gcloud compute instances list --filter "tags:docker-machine" --format json | jq -r '.[].name')
