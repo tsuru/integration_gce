@@ -2,8 +2,40 @@
 
 set -e
 
+if [[ "$GCE_SERVICE_ACCOUNT" == "" ]] ||
+  [[ "$GCE_PROJECT_ID" == "" ]] ||
+  [[ "$GCE_ZONE" == "" ]]; then
+  echo "Missing required envs"
+  exit 1
+fi
+
 export GCE_MACHINE_TYPE=n1-standard-4
 TSURUVERSION=${TSURUVERSION:-latest}
+
+tmpdir=$(mktemp -d)
+gcefilename=$tmpdir/google-application-credentials
+echo $GCE_SERVICE_ACCOUNT > $gcefilename
+export GOOGLE_APPLICATION_CREDENTIALS=$gcefilename
+
+function cleanup() {
+  CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+  echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+  sudo apt-get update -y && sudo apt-get install google-cloud-sdk -y
+
+  export CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE=$gcefilename
+  gcloud config set project $GCE_PROJECT_ID
+
+  clusters=$(gcloud container clusters list --format json | jq -r '.[].name | select(. | contains("icluster-kube-"))')
+  instances=$(gcloud compute instances list --filter "tags:docker-machine" --format json | jq -r '.[].name')
+  gcloud container clusters delete $clusters
+  gcloud compute instances delete $instances
+}
+
+if which apt-get; then
+  cleanup
+  trap cleanup EXIT
+fi
 
 echo "Going to test tsuru image version: $TSURUVERSION"
 
@@ -18,7 +50,6 @@ sed -i.bak "s|\$GCE_ZONE|${GCE_ZONE}|g" ${finalconfigpath}
 sed -i.bak "s|\$GCE_MACHINE_TYPE|${GCE_MACHINE_TYPE}|g" ${finalconfigpath}
 sed -i.bak "s|\$TSURUVERSION|${TSURUVERSION}|g" ${finalconfigpath}
 
-tmpdir=$(mktemp -d)
 export GOPATH=${tmpdir}
 export PATH=$GOPATH/bin:$PATH
 echo "Go get platforms..."
@@ -40,17 +71,13 @@ fi
 go install ./...
 popd
 
-gcefilename=$tmpdir/google-application-credentials
-echo $GCE_SERVICE_ACCOUNT > $gcefilename
-export GOOGLE_APPLICATION_CREDENTIALS=$gcefilename
 export TSURU_INTEGRATION_installername=$instancename
 if [ -z $TSURU_INTEGRATION_clusters ]; then
-  export TSURU_INTEGRATION_clusters="gce"
+  export TSURU_INTEGRATION_clusters="gke"
 fi
 export TSURU_INTEGRATION_examplesdir="${GOPATH}/src/github.com/tsuru/platforms/examples"
 export TSURU_INTEGRATION_installerconfig=${finalconfigpath}
 export TSURU_INTEGRATION_nodeopts="iaas=dockermachine"
-export TSURU_INTEGRATION_clusters="gke"
 export TSURU_INTEGRATION_maxconcurrency=4
 export TSURU_INTEGRATION_enabled=1
 if [ -z $TSURU_INTEGRATION_verbose ]; then
