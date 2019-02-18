@@ -30,8 +30,8 @@ function cleanup() {
 
   clusters=$(gcloud container clusters list --format json | jq -r '.[].name | select(. | contains("icluster-kube-"))')
   instances=$(gcloud compute instances list --filter "tags:docker-machine" --format json | jq -r '.[].name')
-  gcloud container clusters delete $clusters
-  gcloud compute instances delete $instances
+  gcloud container clusters delete -q $clusters
+  gcloud compute instances delete -q $instances
 }
 
 if which apt-get; then
