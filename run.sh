@@ -62,8 +62,6 @@ echo "Go get platforms..."
 go get -d github.com/tsuru/platforms/examples/go
 echo "Go get tsuru..."
 go get github.com/tsuru/tsuru/integration
-pushd $GOPATH/src/github.com/tsuru/tsuru
-
 echo "Go get tsuru client..."
 go get -d github.com/tsuru/tsuru-client/tsuru
 pushd $GOPATH/src/github.com/tsuru/tsuru-client
@@ -77,6 +75,7 @@ if [ "$TSURUVERSION" != "latest" ]; then
 fi
 go install ./...
 popd
+pushd $GOPATH/src/github.com/tsuru/tsuru
 
 export TSURU_INTEGRATION_installername=$instancename
 if [ -z $TSURU_INTEGRATION_clusters ]; then
