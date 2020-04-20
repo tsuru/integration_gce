@@ -1,6 +1,6 @@
 # Integration test for Tsuru on Google Compute Engine
 
-[![CircleCI](https://circleci.com/gh/tsuru/integration_gce.svg?style=svg)](https://circleci.com/gh/tsuru/integration_gce)
+![integration](https://github.com/tsuru/integration_gce/workflows/integration/badge.svg)
 
 This project should make it easier to run Tsuru integration test on Google Compute Engine.
 

@@ -1,0 +1,27 @@
+name: integration
+on:
+  push:
+  pull_request:
+  schedule:
+  - cron: '0 9 * * *'
+jobs:
+  test:
+    strategy:
+      max-parallel: 1
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v1
+      with:
+        go-version: 1.14
+
+    - uses: actions/checkout@v1
+
+    - run: sudo apt-get update && sudo apt-get install -y rsyslog xmlsec1 libsasl2-dev uuid-runtime
+    
+    - name: Run integration
+      env:
+        GCE_SERVICE_ACCOUNT: ${{ secrets.GCE_SERVICE_ACCOUNT }}
+        GCE_PROJECT_ID: ${{ secrets.GCE_PROJECT_ID }}
+        GCE_ZONE: ${{ secrets.GCE_ZONE }}
+      run: |
+        while true; do echo .; sleep 30; done & ./run.sh

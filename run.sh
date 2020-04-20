@@ -62,6 +62,7 @@ echo "Go get platforms..."
 go get -d github.com/tsuru/platforms/examples/go
 echo "Go get tsuru..."
 go get github.com/tsuru/tsuru/integration
+pushd $GOPATH/src/github.com/tsuru/tsuru
 
 echo "Go get tsuru client..."
 go get -d github.com/tsuru/tsuru-client/tsuru
@@ -90,6 +91,6 @@ if [ -z $TSURU_INTEGRATION_verbose ]; then
   export TSURU_INTEGRATION_verbose=1
 fi
 
-go test -v -timeout 120m github.com/tsuru/tsuru/integration
+go test -v -timeout 120m ./integration
 
 rm -f ${finalconfigpath}
