@@ -56,6 +56,7 @@ sed -i.bak "s|\$GCE_ZONE|${GCE_ZONE}|g" ${finalconfigpath}
 sed -i.bak "s|\$GCE_MACHINE_TYPE|${GCE_MACHINE_TYPE}|g" ${finalconfigpath}
 sed -i.bak "s|\$TSURUVERSION|${TSURUVERSION}|g" ${finalconfigpath}
 
+export GO111MODULE=on
 export GOPATH=${tmpdir}
 export PATH=$GOPATH/bin:$PATH
 echo "Go get platforms..."
