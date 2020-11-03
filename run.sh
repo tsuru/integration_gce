@@ -82,7 +82,10 @@ popd
 gcloud beta container clusters create icluster-kube-integration --machine-type=n1-standard-4 --num-nodes "2" --zone=$GCE_ZONE --enable-basic-auth
 
 export TSURU_INTEGRATION_cluster_addr=$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .endpoint)
-export TSURU_INTEGRATION_cluster_cacert=$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .masterAuth.clusterCaCertificate)
+
+export TSURU_INTEGRATION_cluster_cacert=$(mktemp)
+gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .masterAuth.clusterCaCertificate > TSURU_INTEGRATION_cluster_cacert
+
 export TSURU_INTEGRATION_cluster_username=$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .masterAuth.username)
 export TSURU_INTEGRATION_cluster_password=$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .masterAuth.password)
 
