@@ -1,6 +1,6 @@
 name: integration
 on:
-  push:
+  push: master
   pull_request:
   schedule:
   - cron: '0 9 * * *'
