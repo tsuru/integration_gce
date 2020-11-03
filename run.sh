@@ -84,7 +84,7 @@ gcloud beta container clusters create icluster-kube-integration --machine-type=n
 export TSURU_INTEGRATION_cluster_addr=https://$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .endpoint)
 
 export TSURU_INTEGRATION_cluster_cacert=$(mktemp)
-gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .masterAuth.clusterCaCertificate > TSURU_INTEGRATION_cluster_cacert
+gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clusterCaCertificate | @base64d' > TSURU_INTEGRATION_cluster_cacert
 
 export TSURU_INTEGRATION_cluster_username=$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .masterAuth.username)
 export TSURU_INTEGRATION_cluster_password=$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .masterAuth.password)
