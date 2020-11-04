@@ -79,7 +79,7 @@ fi
 go install ./...
 popd
 
-gcloud beta container clusters create icluster-kube-integration --machine-type=n1-standard-4 --num-nodes "2" --zone=$GCE_ZONE --issue-client-certificate
+gcloud beta container clusters create icluster-kube-integration --machine-type=n1-standard-4 --num-nodes "2" --zone=$GCE_ZONE --issue-client-certificate --enable-legacy-authorization
 
 export TSURU_INTEGRATION_cluster_addr=https://$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .endpoint)
 
