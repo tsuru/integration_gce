@@ -84,13 +84,13 @@ gcloud beta container clusters create icluster-kube-integration --machine-type=n
 export TSURU_INTEGRATION_cluster_addr=https://$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .endpoint)
 
 export TSURU_INTEGRATION_cluster_cacert=$(mktemp)
-gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clusterCaCertificate' | base64 -d > TSURU_INTEGRATION_cluster_cacert
+gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clusterCaCertificate' | base64 -d > $TSURU_INTEGRATION_cluster_cacert
 
 export TSURU_INTEGRATION_cluster_client_certificate=$(mktemp)
-gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clientCertificate' | base64 -d > TSURU_INTEGRATION_cluster_client_certificate
+gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clientCertificate' | base64 -d > $TSURU_INTEGRATION_cluster_client_certificate
 
 export TSURU_INTEGRATION_cluster_client_key=$(mktemp)
-gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clientKey' | base64 -d > TSURU_INTEGRATION_cluster_client_key
+gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clientKey' | base64 -d > $TSURU_INTEGRATION_cluster_client_key
 
 pushd $GOPATH/src/github.com/tsuru/tsuru
 
