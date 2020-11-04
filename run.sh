@@ -59,13 +59,12 @@ sed -i.bak "s|\$TSURUVERSION|${TSURUVERSION}|g" ${finalconfigpath}
 export GO111MODULE=on
 export GOPATH=${tmpdir}
 export PATH=$GOPATH/bin:$PATH
-echo "Go get platforms..."
-go get -d github.com/tsuru/platforms/examples/go
 mkdir -p $GOPATH/src/github.com/tsuru
 echo "Go get tsuru..."
 pushd $GOPATH/src/github.com/tsuru
 git clone https://github.com/tsuru/tsuru
 git clone https://github.com/tsuru/tsuru-client
+git clone https://github.com/tsuru/platforms
 popd
 pushd $GOPATH/src/github.com/tsuru/tsuru-client
 if [ "$TSURUVERSION" != "latest" ]; then
