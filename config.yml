@@ -9,7 +9,7 @@ driver:
     google-disk-size: 20
     google-machine-type: $GCE_MACHINE_TYPE
 docker-storage-driver: overlay
-docker-install-url: https://raw.githubusercontent.com/rancher/install-docker/master/17.09.0.sh
+docker-install-url: https://releases.rancher.com/install-docker/17.09.sh
 docker-flags:
   - experimental
   - log-driver gcplogs
