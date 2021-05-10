@@ -9,8 +9,8 @@ if [[ "$GCE_SERVICE_ACCOUNT" == "" ]] ||
   exit 1
 fi
 
-export GCE_MACHINE_TYPE=n1-standard-4
-TSURUVERSION=${TSURUVERSION:-latest}
+export GCE_MACHINE_TYPE=e2-standard-4
+TSURUVERSION=${TSURUVERSION:-edge}
 
 tmpdir=$(mktemp -d)
 gcefilename=$tmpdir/google-application-credentials
