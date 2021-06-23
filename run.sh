@@ -13,6 +13,7 @@ export GCE_MACHINE_TYPE=e2-standard-4
 TSURUVERSION=${TSURUVERSION:-edge}
 
 tmpdir=$(mktemp -d)
+export CLOUDSDK_CONFIG=$tmpdir
 gcefilename=$tmpdir/google-application-credentials
 echo $GCE_SERVICE_ACCOUNT > $gcefilename
 export GOOGLE_APPLICATION_CREDENTIALS=$gcefilename
@@ -56,29 +57,36 @@ sed -i.bak "s|\$GCE_ZONE|${GCE_ZONE}|g" ${finalconfigpath}
 sed -i.bak "s|\$GCE_MACHINE_TYPE|${GCE_MACHINE_TYPE}|g" ${finalconfigpath}
 sed -i.bak "s|\$TSURUVERSION|${TSURUVERSION}|g" ${finalconfigpath}
 
-export GO111MODULE=on
-export GOPATH=${tmpdir}
-export PATH=$GOPATH/bin:$PATH
-mkdir -p $GOPATH/src/github.com/tsuru
-echo "Go get tsuru..."
-pushd $GOPATH/src/github.com/tsuru
-git clone https://github.com/tsuru/tsuru
-git clone https://github.com/tsuru/tsuru-client
-git clone https://github.com/tsuru/platforms
-popd
-pushd $GOPATH/src/github.com/tsuru/tsuru-client
-if [ "$TSURUVERSION" != "latest" ]; then
-  MINOR=$(echo "$TSURUVERSION" | sed -E 's/^[^0-9]*([0-9]+\.[0-9]+).*$/\1/g')
-  CLIENT_TAG=$(git tag --list "$MINOR.*" --sort=-taggerdate | head -1)
-  if [ "$CLIENT_TAG" != "" ]; then
-    echo "Checking out tsuru-client $CLIENT_TAG"
-    git checkout $CLIENT_TAG
+if [[ "$LOCAL_TSURU_DIR" == "" ]]; then
+  export GO111MODULE=on
+  export GOPATH=${tmpdir}
+  export PATH=$GOPATH/bin:$PATH
+  mkdir -p $GOPATH/src/github.com/tsuru
+  echo "Go get tsuru..."
+  pushd $GOPATH/src/github.com/tsuru
+  git clone https://github.com/tsuru/tsuru
+  git clone https://github.com/tsuru/tsuru-client
+  git clone https://github.com/tsuru/platforms
+  popd
+  pushd $GOPATH/src/github.com/tsuru/tsuru-client
+  if [ "$TSURUVERSION" != "latest" ]; then
+    MINOR=$(echo "$TSURUVERSION" | sed -E 's/^[^0-9]*([0-9]+\.[0-9]+).*$/\1/g')
+    CLIENT_TAG=$(git tag --list "$MINOR.*" --sort=-taggerdate | head -1)
+    if [ "$CLIENT_TAG" != "" ]; then
+      echo "Checking out tsuru-client $CLIENT_TAG"
+      git checkout $CLIENT_TAG
+    fi
   fi
+  go install ./...
+  popd
+  LOCAL_TSURU_DIR=$GOPATH/src/github.com/tsuru/tsuru
 fi
-go install ./...
-popd
 
-gcloud beta container clusters create icluster-kube-integration --machine-type=n1-standard-4 --num-nodes "2" --zone=$GCE_ZONE --issue-client-certificate --enable-legacy-authorization
+gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+
+gcloud config set project ${GCE_PROJECT_ID}
+
+gcloud beta container clusters create icluster-kube-integration --image-type=COS --machine-type=n1-standard-4 --num-nodes "2" --zone=$GCE_ZONE --issue-client-certificate --enable-legacy-authorization
 
 export TSURU_INTEGRATION_cluster_addr=https://$(gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r .endpoint)
 
@@ -91,7 +99,7 @@ gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZO
 export TSURU_INTEGRATION_cluster_client_key=$(mktemp)
 gcloud beta container clusters describe icluster-kube-integration --zone $GCE_ZONE --format json | jq -r '.masterAuth.clientKey' | base64 -d > $TSURU_INTEGRATION_cluster_client_key
 
-pushd $GOPATH/src/github.com/tsuru/tsuru
+pushd $LOCAL_TSURU_DIR
 
 export TSURU_INTEGRATION_installername=$instancename
 if [ -z $TSURU_INTEGRATION_clusters ]; then
